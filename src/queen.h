@@ -8,7 +8,8 @@ class Queen : public Chesspiece
 public:
     Queen(int x, int y, PieceColor pieceColor);
 
-    void discoverSteps(std::vector<DiscoveredStep>& discoveredSteps);
+    void discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const override;
+    std::string getName();
 };
 
 #endif // QUEEN_H

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
 #include "piececolor.h"
 #include "discoveredstep.h"
 
@@ -24,7 +25,8 @@ public:
     bool isHit();
     PieceColor getColor();
 
-    virtual void discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) = 0;
+    virtual void discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const = 0;
+    virtual std::string getName() = 0;
 };
 
 #endif // CHESSPIECE_H

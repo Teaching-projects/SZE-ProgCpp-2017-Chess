@@ -2,13 +2,18 @@
 
 Pawn::Pawn(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void Pawn::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
+void Pawn::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
 {
     int possibleSteps[3][2] = {
-        {-1, 1}, // only when hitting enemy
-        {0, 1},
-        {1, 1} // only when hitting enemy
+        {-1, 0}, // only when hitting enemy
+        {0, 0},
+        {1, 0} // only when hitting enemy
     };
+
+    for (int i = 0; i < 3; i++)
+    {
+        possibleSteps[i][1] = this->pieceColor == white ? -1 : 1;
+    }
 
     for (int i = 0; i < 3; i++)
     {
@@ -21,4 +26,9 @@ void Pawn::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
             discoveredSteps.push_back(DiscoveredStep(posX, posY));
         }
     }
+}
+
+std::string Pawn::getName()
+{
+    return "pawn";
 }

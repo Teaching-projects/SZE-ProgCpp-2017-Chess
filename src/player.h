@@ -18,6 +18,7 @@ public:
     void discoverStepsForAll(Chessboard& chessboard);
     void addPiece(Chesspiece* piece);
     void emptyPieces();
+    bool hasPiece(const Chesspiece* piece);
 };
 
 #endif // PLAYER_H

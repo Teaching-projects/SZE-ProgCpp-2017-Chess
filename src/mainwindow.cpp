@@ -7,7 +7,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->game = Game();
+    //this->game = Game();
+    this->game.startNew();
 
     for (int i = 0; i < ROW; i++)
     {
@@ -16,30 +17,31 @@ MainWindow::MainWindow(QWidget *parent) :
             this->fields[i][j] = new QPushButton(this);
             this->fields[i][j]->setGeometry(QRect(QPoint(i * 75, j * 75), QSize(75, 75)));
             this->fields[i][j]->setObjectName(QString::number(i).append(QString::number(j)));
+            this->fields[i][j]->setProperty("discovered", false);
 
-            QString style("QPushButton {border: 0, 0, 0, 0; color: gray; background: %1;} QPushButton:hover {border: 5px solid orange;}");
+            QString style("QPushButton[discovered=true] {border: 3px solid red;} QPushButton[discovered=false] {border: 0, 0, 0, 0; color: gray; background: %1;} QPushButton:hover {border: 5px solid orange;}");
             QString color;
 
             if (i % 2 == 0)
             {
                 if (j % 2 == 0)
                 {
-                    color = QString("white");
+                    color = QString("#ffffff");
                 }
                 else
                 {
-                    color = QString("black");
+                    color = QString("#666666");
                 }
             }
             else
             {
                 if (j % 2 == 0)
                 {
-                    color = QString("black");
+                    color = QString("#666666");
                 }
                 else
                 {
-                    color = QString("white");
+                    color = QString("#ffffff");
                 }
             }
 
@@ -54,20 +56,61 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::drawDiscoveredSteps()
 {
-    /*QPalette pal = this->fields[i][j]->palette();
+    /*QPalette pal = this->fields[3][3]->palette();
     pal.setColor(QPalette::Button, QColor(Qt::red));
-    this->fields[i][j]->setAutoFillBackground(true);
-    this->fields[i][j]->setPalette(pal);*/
+    this->fields[3][3]->setAutoFillBackground(true);
+    this->fields[3][3]->setPalette(pal);*/
+
+    std::vector<DiscoveredStep> discoveredSteps = this->game.getDiscoveredSteps();
+
+    for (int i = 0; i < discoveredSteps.size(); i++)
+    {
+        this->fields[discoveredSteps[i].getX()][discoveredSteps[i].getY()]->setProperty("discovered", true);
+        this->fields[discoveredSteps[i].getX()][discoveredSteps[i].getY()]->setStyleSheet("border: 3px solid red;");
+    }
 }
 
 void MainWindow::drawChesspieces()
+{
+    std::vector<std::string> pieceNames;
+
+    this->game.getChessPieces(pieceNames);
+
+    int j = 0;
+    int k = -1;
+
+    for (int i = 0; i < pieceNames.size(); i++, j++)
+    {
+        if (i % 8 == 0)
+        {
+            j = 0;
+            k++;
+        }
+
+        if (pieceNames[i] != "")
+        {
+            QString pieceName = QString::fromStdString(pieceNames[i]);
+            QPixmap pixmap(QString("C:/Users/Tomi/Desktop/SZE-ProgCpp-2017-Chess/src/img/%1.png").arg(pieceName));
+            QIcon buttonIcon(pixmap);
+
+            this->fields[j][k]->setIcon(buttonIcon);
+            this->fields[j][k]->setIconSize(QSize(60, 60));
+        }
+        else
+        {
+            this->fields[j][k]->setIcon(QIcon());
+        }
+    };
+}
+
+void MainWindow::clearDiscoveredSteps()
 {
     for (int i = 0; i < ROW; i++)
     {
         for (int j = 0; j < COL; j++)
         {
-            this->fields[i][j]->setText("Chess");
-            this->fields[i][j]->update();
+            this->fields[i][j]->setProperty("discovered", false);
+            this->fields[i][j]->setStyleSheet("border: 0 0 0 0;");
         }
     }
 }
@@ -80,10 +123,10 @@ void MainWindow::fieldSelected()
     {
         QString buttonName = buttonClicked->objectName();
 
-        int x = buttonName.toStdString()[0];
-        int y = buttonName.toStdString()[1];
+        int x = buttonName.toStdString()[0] - '0';
+        int y = buttonName.toStdString()[1] - '0';
 
-        /*if (this->buttonClickForPieceSelection)
+        if (this->buttonClickForPieceSelection)
         {
             if (this->game.selectPieceForStep(x, y)) // Is selection valid?
             {
@@ -93,13 +136,19 @@ void MainWindow::fieldSelected()
         }
         else
         {
-            if (this->game.movePieceTo(x, y)) // Is selection valid?
+            if (this->game.changeSelection(x, y) && this->game.selectPieceForStep(x, y))
             {
+                this->clearDiscoveredSteps();
+                this->drawDiscoveredSteps();
+                this->buttonClickForPieceSelection = false;
+            }
+            else if (this->game.movePieceTo(x, y)) // Is selection valid?
+            {
+                this->clearDiscoveredSteps();
                 this->drawChesspieces();
                 this->buttonClickForPieceSelection = true;
             }
-
-        }*/
+        }
     }
 }
 

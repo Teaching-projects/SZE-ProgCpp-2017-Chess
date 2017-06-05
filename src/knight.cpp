@@ -2,7 +2,7 @@
 
 Knight::Knight(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void Knight::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
+void Knight::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
 {
     int possibleSteps[8][2] = {
         {-1, 2},
@@ -26,4 +26,9 @@ void Knight::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
             discoveredSteps.push_back(DiscoveredStep(posX, posY));
         }
     }
+}
+
+std::string Knight::getName()
+{
+    return "knight";
 }

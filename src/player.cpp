@@ -24,3 +24,16 @@ void Player::emptyPieces()
 {
     this->pieces.clear();
 }
+
+bool Player::hasPiece(const Chesspiece* piece)
+{
+    for (int i = 0; i < this->pieces.size(); i++)
+    {
+        if (this->pieces[i] == piece)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

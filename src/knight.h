@@ -8,7 +8,8 @@ class Knight : public Chesspiece
 public:
     Knight(int x, int y, PieceColor pieceColor);
 
-    void discoverSteps(std::vector<DiscoveredStep>& discoveredSteps);
+    void discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const override;
+    std::string getName();
 };
 
 #endif // KNIGHT_H

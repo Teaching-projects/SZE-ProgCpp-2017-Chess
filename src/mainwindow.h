@@ -1,13 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <iostream>
+#include <vector>
+#include <string>
 #include <QMainWindow>
 #include <QPushButton>
 #include <QPalette>
 #include "Game.h"
-
-
-#include <iostream>
 
 #define ROW 8
 #define COL 8
@@ -34,6 +34,7 @@ private:
 
     void drawDiscoveredSteps();
     void drawChesspieces();
+    void clearDiscoveredSteps();
 
 private slots:
     void fieldSelected();

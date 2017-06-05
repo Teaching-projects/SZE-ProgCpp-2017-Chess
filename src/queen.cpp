@@ -2,7 +2,7 @@
 
 Queen::Queen(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void Queen::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
+void Queen::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
 {
     for (int i = this->positionX + 1; i < 8; i++)
     {
@@ -65,4 +65,9 @@ void Queen::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
             }
         }
     }
+}
+
+std::string Queen::getName()
+{
+    return "queen";
 }

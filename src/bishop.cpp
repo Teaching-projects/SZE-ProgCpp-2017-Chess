@@ -2,7 +2,7 @@
 
 Bishop::Bishop(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void Bishop::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
+void Bishop::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
 {
     /*for (int i = 0; i < 8; i++)
     {
@@ -57,4 +57,9 @@ void Bishop::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
             }
         }
     }
+}
+
+std::string Bishop::getName()
+{
+    return "bishop";
 }

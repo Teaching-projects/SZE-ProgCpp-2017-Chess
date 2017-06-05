@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
+#include <iterator>
 #include "discoveredstep.h"
 #include "chesspiece.h"
 #include "king.h"
@@ -36,8 +38,12 @@ public:
 
     void replacePieces();
     void addPiecesToPlayers(Player& whitePlayer, Player& blackPlayer);
-    bool selectPiece(int x, int y);
+    bool selectPiece(int x, int y, Player& activePlayer);
+    bool changeSelection(int x, int y);
     bool movePieceTo(int x, int y);
+    void getPieceNames(std::vector<std::string>& pieceNames);
+    void ruleDiscoveredSteps();
+    std::vector<DiscoveredStep> getDiscoveredSteps();
 };
 
 #endif // CHESSBOARD_H

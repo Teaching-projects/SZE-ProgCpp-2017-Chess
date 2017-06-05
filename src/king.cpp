@@ -2,7 +2,7 @@
 
 King::King(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void King::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
+void King::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
 {
     int possibleSteps[8][2] = {
         {0, 1},
@@ -26,4 +26,9 @@ void King::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps)
             discoveredSteps.push_back(DiscoveredStep(posX, posY));
         }
     }
+}
+
+std::string King::getName()
+{
+    return "king";
 }
