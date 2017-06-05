@@ -2,22 +2,27 @@
 
 Game::Game()
 {
-    this->chessboard = Chessboard();
+    /*this->chessboard = Chessboard();
     this->whitePlayer = Player();
-    this->blackPlayer = Player();
+    this->blackPlayer = Player();*/
+
+    this->startNew();
+    this->activePlayer = white;
 }
 
 void Game::startNew()
 {
+    this->whitePlayer.emptyPieces();
+    this->blackPlayer.emptyPieces();
     this->chessboard.replacePieces();
 }
 
-void Game::selectPieceForStep(int x, int y)
+bool Game::selectPieceForStep(int x, int y)
 {
-
+    return this->chessboard.selectPiece(x, y);
 }
 
-void Game::movePieceTo(int x, int y)
+bool Game::movePieceTo(int x, int y)
 {
-
+    return this->chessboard.movePieceTo(x, y);
 }

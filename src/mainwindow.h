@@ -6,6 +6,9 @@
 #include <QPalette>
 #include "Game.h"
 
+
+#include <iostream>
+
 #define ROW 8
 #define COL 8
 
@@ -25,6 +28,12 @@ private:
     Ui::MainWindow *ui;
 
     QPushButton *fields[ROW][COL];
+
+    Game game;
+    bool buttonClickForPieceSelection = true;
+
+    void drawDiscoveredSteps();
+    void drawChesspieces();
 
 private slots:
     void fieldSelected();

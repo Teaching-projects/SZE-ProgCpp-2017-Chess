@@ -2,6 +2,8 @@
 
 Chessboard::Chessboard()
 {
+    this->selectedPiece = nullptr;
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
@@ -18,14 +20,13 @@ Chessboard::~Chessboard()
 
 void Chessboard::clearChessboard()
 {
+    // TODO error when closing app
+
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            if (this->pieceFields[i][j] != nullptr)
-            {
-                delete this->pieceFields[i][j];
-            }
+            delete this->pieceFields[i][j];
         }
     }
 }
@@ -37,6 +38,9 @@ void Chessboard::emptyDiscoveredSteps()
 
 void Chessboard::replacePieces()
 {
+    this->selectedX = this->selectedY = -1;
+    this->selectedPiece = nullptr;
+
     this->clearChessboard();
 
     for (int i = 0; i < 2; i++)
@@ -60,4 +64,32 @@ void Chessboard::replacePieces()
             this->pieceFields[row][j] = new Pawn(row, j, pieceColor);
         }
     }
+}
+
+void Chessboard::addPiecesToPlayers(Player& whitePlayer, Player& blackPlayer)
+{
+    for (int i = 0; i < 8; i++)
+    {
+        //whitePlayer.addPiece();
+    }
+}
+
+bool Chessboard::selectPiece(int x, int y)
+{
+    this->selectedX = x;
+    this->selectedY = y;
+    this->selectedPiece = this->pieceFields[y][x];
+
+    return this->selectedPiece == nullptr; // TODO own piece
+}
+
+bool Chessboard::movePieceTo(int x, int y)
+{
+    // TODO checks, hit
+
+    this->selectedPiece->goTo(x, y);
+    this->pieceFields[this->selectedY][this->selectedX] = nullptr;
+    this->pieceFields[y][x] = this->selectedPiece;
+
+    return true;
 }

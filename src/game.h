@@ -10,13 +10,14 @@ private:
     Chessboard chessboard;
     Player whitePlayer;
     Player blackPlayer;
+    PieceColor activePlayer;
 
 public:
     Game();
 
     void startNew();
-    void selectPieceForStep(int x, int y);
-    void movePieceTo(int x, int y);
+    bool selectPieceForStep(int x, int y);
+    bool movePieceTo(int x, int y);
 };
 
 #endif // GAME_H

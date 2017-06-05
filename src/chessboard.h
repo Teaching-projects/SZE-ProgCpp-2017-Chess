@@ -12,7 +12,8 @@
 #include "knight.h"
 #include "pawn.h"
 
-class Player;
+//class Player;
+#include "player.h"
 
 class Chessboard
 {
@@ -23,6 +24,9 @@ private:
     Chesspiece *selectedPiece;
     std::vector<DiscoveredStep> discoveredSteps;
 
+    int selectedX;
+    int selectedY;
+
     void clearChessboard();
     void emptyDiscoveredSteps();
 
@@ -31,6 +35,9 @@ public:
     ~Chessboard();
 
     void replacePieces();
+    void addPiecesToPlayers(Player& whitePlayer, Player& blackPlayer);
+    bool selectPiece(int x, int y);
+    bool movePieceTo(int x, int y);
 };
 
 #endif // CHESSBOARD_H
