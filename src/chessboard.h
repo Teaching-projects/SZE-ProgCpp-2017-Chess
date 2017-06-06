@@ -55,6 +55,7 @@ public:
     void ruleDiscoveredSteps(Player& enemyPlayer);
     bool isEnemyInCheck(Player& player);
     bool isEnemyInCheck(Player& player, std::vector<DiscoveredStep>& discoveredSteps, Chesspiece *const pieceFields[][COL]);
+    bool isCheckmate(Player& activePlayer, Player& enemyPlayer);
     std::vector<DiscoveredStep> getDiscoveredSteps();
 };
 

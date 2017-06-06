@@ -50,6 +50,13 @@ bool Game::isEnemyInCheck()
     return this->chessboard.isEnemyInCheck(this->activePlayer == &this->whitePlayer ? this->blackPlayer : this->whitePlayer);
 }
 
+bool Game::isCheckmate()
+{
+    // Player's already changed
+    return this->chessboard.isCheckmate(this->activePlayer == &this->whitePlayer ? this->blackPlayer : this->whitePlayer,
+                                        this->activePlayer == &this->whitePlayer ? this->whitePlayer : this->blackPlayer);
+}
+
 void Game::getChessPieces(std::vector<std::string>& pieceNames)
 {
     this->chessboard.getPieceNames(pieceNames);

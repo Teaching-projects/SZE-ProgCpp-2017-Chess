@@ -55,7 +55,8 @@ void Chessboard::replacePieces()
 #ifdef DEBUG_STEPS
 
     this->pieceFields[7][0] = new King(0, 7, white);
-    this->pieceFields[4][3] = new Queen(3, 4, black);
+    //this->pieceFields[4][3] = new Queen(3, 4, black);
+    this->pieceFields[0][1] = new King(1, 0, black);
     this->pieceFields[5][4] = new Pawn(4, 5, white);
     this->pieceFields[4][7] = new Rook(7, 4, white);
     this->pieceFields[5][0] = new Rook(0, 5, white);
@@ -92,7 +93,8 @@ void Chessboard::addPiecesToPlayers(Player& whitePlayer, Player& blackPlayer)
 #ifdef DEBUG_STEPS
 
     whitePlayer.addPiece(this->pieceFields[7][0]);
-    blackPlayer.addPiece(this->pieceFields[4][3]);
+    //blackPlayer.addPiece(this->pieceFields[4][3]);
+    blackPlayer.addPiece(this->pieceFields[0][1]);
     whitePlayer.addPiece(this->pieceFields[5][4]);
     whitePlayer.addPiece(this->pieceFields[4][7]);
     whitePlayer.addPiece(this->pieceFields[5][0]);
@@ -156,8 +158,6 @@ bool Chessboard::changeSelection(int x, int y)
 
 bool Chessboard::movePieceTo(int x, int y, Player& enemyPlayer)
 {
-    // TODO checks, hit
-
     bool validStep = false;
 
     for (int i = 0; i < this->discoveredSteps.size(); i++)
@@ -212,7 +212,7 @@ void Chessboard::ruleDiscoveredSteps(Player& enemyPlayer)
 
     int prevX = this->selectedX;
     int prevY = this->selectedY;
-    Chesspiece *prevPiece = nullptr;
+    Chesspiece *prevPiece = nullptr; // Needed for possible hits. E.g. the king is not in check if the bishop gets hit
 
     std::vector<DiscoveredStep> enemyDiscoveredSteps;
 
@@ -243,7 +243,11 @@ void Chessboard::ruleDiscoveredSteps(Player& enemyPlayer)
         prevX = x;
         prevY = y;
 
-        if (dynamic_cast<King*>(this->pieceFields[y][x]) || this->isEnemyInCheck(enemyPlayer, enemyDiscoveredSteps, this->tmpPieceFields))
+        if ((this->pieceFields[y][x] != nullptr &&
+                this->selectedPiece->getColor() != this->pieceFields[y][x]->getColor() &&
+                dynamic_cast<King*>(this->pieceFields[y][x])) || // Cannot hit king directly - necessary?
+
+                this->isEnemyInCheck(enemyPlayer, enemyDiscoveredSteps, this->tmpPieceFields))
         {
             i = this->discoveredSteps.erase(i);
         }
@@ -263,7 +267,7 @@ bool Chessboard::isEnemyInCheck(Player& player, std::vector<DiscoveredStep>& dis
 {
     bool inCheck = false;
 
-    for (int i = 0; i < player.pieces.size(); i++)
+    for (int i = 0; i < player.pieces.size(); i++) // Go through all enemy pieces
     {
         bool isInPieceFieldsMatrix = false;
 
@@ -278,7 +282,7 @@ bool Chessboard::isEnemyInCheck(Player& player, std::vector<DiscoveredStep>& dis
             }
         }
 
-        if (isInPieceFieldsMatrix) // Only for step checks - 'would the king be in check'
+        if (isInPieceFieldsMatrix) // Only for step checks - 'would the king be in check if a piece was hit'
         {
             discoveredSteps.clear();
             player.pieces[i]->discoverSteps(discoveredSteps, pieceFields);
@@ -290,16 +294,33 @@ bool Chessboard::isEnemyInCheck(Player& player, std::vector<DiscoveredStep>& dis
 
                 if (pieceFields[y][x] != nullptr &&
                     pieceFields[y][x]->getColor() != player.getColor() &&
-                    dynamic_cast<King*>(pieceFields[y][x]))
+                    dynamic_cast<King*>(pieceFields[y][x])) // Enemy would hit/hits king
                 {
                     inCheck = true;
-                    // TODO add piece to list
                 }
             }
         }
     }
 
     return inCheck;
+}
+
+bool Chessboard::isCheckmate(Player& activePlayer, Player& enemyPlayer)
+{
+    // TODO fix bug
+    /*int numberOfMovablePieces = 0;
+
+    for (int i = 0; i < enemyPlayer.pieces.size(); i++)
+    {
+        this->emptyDiscoveredSteps();
+        enemyPlayer.pieces[i]->discoverSteps(this->discoveredSteps, this->pieceFields);
+        this->ruleDiscoveredSteps(activePlayer);
+        numberOfMovablePieces += this->discoveredSteps.size();
+    }
+
+    return numberOfMovablePieces == 0;*/
+
+    return false;
 }
 
 std::vector<DiscoveredStep> Chessboard::getDiscoveredSteps()

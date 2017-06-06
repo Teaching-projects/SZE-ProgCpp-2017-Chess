@@ -10,16 +10,6 @@ Player::Player(PieceColor color)
     this->color = color;
 }
 
-void Player::discoverStepsForAll(Chessboard& chessboard)
-{
-    for (int i = 0; i < this->pieces.size(); i++)
-    {
-        //this->pieces[i]->discoverSteps();
-
-        // do something
-    }
-}
-
 void Player::addPiece(Chesspiece* piece)
 {
     this->pieces.push_back(piece);

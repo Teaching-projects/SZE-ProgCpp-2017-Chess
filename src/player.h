@@ -19,7 +19,6 @@ public:
     Player();
     Player(PieceColor color);
 
-    void discoverStepsForAll(Chessboard& chessboard);
     void addPiece(Chesspiece* piece);
     void removePiece(Chesspiece* piece);
     void emptyPieces();

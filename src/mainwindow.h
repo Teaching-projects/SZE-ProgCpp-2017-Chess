@@ -7,6 +7,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QDir>
 #include "Game.h"
 
 #define ROW 8

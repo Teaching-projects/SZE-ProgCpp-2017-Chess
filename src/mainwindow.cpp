@@ -17,9 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
             this->fields[i][j] = new QPushButton(this);
             this->fields[i][j]->setGeometry(QRect(QPoint(i * 75, j * 75), QSize(75, 75)));
             this->fields[i][j]->setObjectName(QString::number(i).append(QString::number(j)));
-            this->fields[i][j]->setProperty("discovered", false);
 
-            QString style("QPushButton[discovered=true] {border: 3px solid red;} QPushButton[discovered=false] {border: 0, 0, 0, 0; color: gray; background: %1;} QPushButton:hover {border: 5px solid orange;}");
+            QString styleDefault("QPushButton {border: 0, 0, 0, 0; color: gray; background: %1;} QPushButton:hover {border: 5px solid orange;}");
+            QString styleSelected("QPushButton {border: 3px solid red; color: gray; background: %1;} QPushButton:hover {border: 5px solid orange;}");
             QString color;
 
             if (i % 2 == 0)
@@ -45,7 +45,13 @@ MainWindow::MainWindow(QWidget *parent) :
                 }
             }
 
-            this->fields[i][j]->setStyleSheet(style.arg(color));
+            styleDefault = styleDefault.arg(color);
+            styleSelected = styleSelected.arg(color);
+
+            this->fields[i][j]->setProperty("styleDefault", styleDefault);
+            this->fields[i][j]->setProperty("styleSelected", styleSelected);
+
+            this->fields[i][j]->setStyleSheet(styleDefault);
 
             connect(this->fields[i][j], SIGNAL (released()), this, SLOT (fieldSelected()));
         }
@@ -56,17 +62,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
 void MainWindow::drawDiscoveredSteps()
 {
-    /*QPalette pal = this->fields[3][3]->palette();
-    pal.setColor(QPalette::Button, QColor(Qt::red));
-    this->fields[3][3]->setAutoFillBackground(true);
-    this->fields[3][3]->setPalette(pal);*/
-
     std::vector<DiscoveredStep> discoveredSteps = this->game.getDiscoveredSteps();
 
     for (int i = 0; i < discoveredSteps.size(); i++)
     {
-        this->fields[discoveredSteps[i].getX()][discoveredSteps[i].getY()]->setProperty("discovered", true);
-        this->fields[discoveredSteps[i].getX()][discoveredSteps[i].getY()]->setStyleSheet("border: 3px solid red;");
+        QString style = this->fields[discoveredSteps[i].getX()][discoveredSteps[i].getY()]->property("styleSelected").toString();
+        this->fields[discoveredSteps[i].getX()][discoveredSteps[i].getY()]->setStyleSheet(style);
     }
 }
 
@@ -90,7 +91,8 @@ void MainWindow::drawChesspieces()
         if (pieceNames[i] != "")
         {
             QString pieceName = QString::fromStdString(pieceNames[i]);
-            QPixmap pixmap(QString("C:/Users/Tomi/Desktop/SZE-ProgCpp-2017-Chess/src/img/%1.png").arg(pieceName));
+            //QPixmap pixmap(QString("C:/Users/Tomi/Desktop/SZE-ProgCpp-2017-Chess/src/img/%1.png").arg(pieceName));
+            QPixmap pixmap(QDir::currentPath().append("/").append(QString("img/%1.png").arg(pieceName)));
             QIcon buttonIcon(pixmap);
 
             this->fields[j][k]->setIcon(buttonIcon);
@@ -109,8 +111,8 @@ void MainWindow::clearDiscoveredSteps()
     {
         for (int j = 0; j < COL; j++)
         {
-            this->fields[i][j]->setProperty("discovered", false);
-            this->fields[i][j]->setStyleSheet("border: 0 0 0 0;");
+            QString style = this->fields[i][j]->property("styleDefault").toString();
+            this->fields[i][j]->setStyleSheet(style);
         }
     }
 }
@@ -150,12 +152,14 @@ void MainWindow::fieldSelected()
 
                 if (this->game.isEnemyInCheck())
                 {
-                    /*if (checkmate)
+                    if (this->game.isCheckmate())
                     {
-                        QMessageBox::information(this, "Game over!", "Checkmate");
-                    }*/
-
-                    QMessageBox::information(this, "Check!", "The king is under threat of capture.");
+                        QMessageBox::information(this, "Game over!", "Checkmate.");
+                    }
+                    else
+                    {
+                        QMessageBox::information(this, "Check!", "The king is under threat of capture.");
+                    }
                 }
             }
         }
