@@ -2,7 +2,8 @@
 
 Game::Game()
 {
-
+    this->whitePlayer = Player(white);
+    this->blackPlayer = Player(black);
 }
 
 void Game::startNew()
@@ -17,7 +18,8 @@ void Game::startNew()
 
 bool Game::selectPieceForStep(int x, int y)
 {
-    return this->chessboard.selectPiece(x, y, *(this->activePlayer));
+    return this->chessboard.selectPiece(x, y, *this->activePlayer,
+                                        this->activePlayer == &this->whitePlayer ? this->blackPlayer : this->whitePlayer);
 }
 
 bool Game::changeSelection(int x, int y)
@@ -27,7 +29,9 @@ bool Game::changeSelection(int x, int y)
 
 bool Game::movePieceTo(int x, int y)
 {
-    if (this->chessboard.movePieceTo(x, y))
+    Player *enemyPlayer = this->activePlayer == &this->whitePlayer ? &this->blackPlayer : &this->whitePlayer;
+
+    if (this->chessboard.movePieceTo(x, y, *enemyPlayer))
     {
         // Change active player
         this->activePlayer = this->activePlayer == &this->whitePlayer ? &this->blackPlayer : &this->whitePlayer;
@@ -38,6 +42,12 @@ bool Game::movePieceTo(int x, int y)
     {
         return false;
     }
+}
+
+bool Game::isEnemyInCheck()
+{
+    // Player's already changed
+    return this->chessboard.isEnemyInCheck(this->activePlayer == &this->whitePlayer ? this->blackPlayer : this->whitePlayer);
 }
 
 void Game::getChessPieces(std::vector<std::string>& pieceNames)

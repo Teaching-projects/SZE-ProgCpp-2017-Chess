@@ -5,6 +5,11 @@ Player::Player()
 
 }
 
+Player::Player(PieceColor color)
+{
+    this->color = color;
+}
+
 void Player::discoverStepsForAll(Chessboard& chessboard)
 {
     for (int i = 0; i < this->pieces.size(); i++)
@@ -18,6 +23,18 @@ void Player::discoverStepsForAll(Chessboard& chessboard)
 void Player::addPiece(Chesspiece* piece)
 {
     this->pieces.push_back(piece);
+}
+
+void Player::removePiece(Chesspiece* piece)
+{
+    for (int i = 0; i < this->pieces.size(); i++)
+    {
+        if (this->pieces[i] == piece)
+        {
+            this->pieces.erase(this->pieces.begin() + i);
+            break;
+        }
+    }
 }
 
 void Player::emptyPieces()
@@ -36,4 +53,9 @@ bool Player::hasPiece(const Chesspiece* piece)
     }
 
     return false;
+}
+
+PieceColor Player::getColor()
+{
+    return this->color;
 }

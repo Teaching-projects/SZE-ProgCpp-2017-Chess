@@ -2,7 +2,7 @@
 
 King::King(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void King::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
+void King::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps, Chesspiece *const fields[][COL]) const
 {
     int possibleSteps[8][2] = {
         {0, 1},
@@ -23,7 +23,7 @@ void King::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
         if (posX < 8 && posX > -1 &&
             posY < 8 && posY > -1)
         {
-            discoveredSteps.push_back(DiscoveredStep(posX, posY));
+            this->addDiscoveredStep(discoveredSteps, posX, posY, fields);
         }
     }
 }

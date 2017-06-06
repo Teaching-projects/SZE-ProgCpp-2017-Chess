@@ -2,7 +2,7 @@
 
 Pawn::Pawn(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void Pawn::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
+void Pawn::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps, Chesspiece *const fields[][COL]) const
 {
     int possibleSteps[3][2] = {
         {-1, 0}, // only when hitting enemy
@@ -23,7 +23,22 @@ void Pawn::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
         if (posX < 8 && posX > -1 &&
             posY < 8 && posY > -1)
         {
-            discoveredSteps.push_back(DiscoveredStep(posX, posY));
+            switch (i)
+            {
+                case 0:
+                case 2:
+                    if (fields[posY][posX] != nullptr && fields[posY][posX]->getColor() != this->pieceColor)
+                    {
+                        this->addDiscoveredStep(discoveredSteps, posX, posY, fields);
+                    }
+                    break;
+                case 1:
+                    if (fields[posY][posX] == nullptr)
+                    {
+                       this->addDiscoveredStep(discoveredSteps, posX, posY, fields);
+                    }
+                    break;
+            }
         }
     }
 }

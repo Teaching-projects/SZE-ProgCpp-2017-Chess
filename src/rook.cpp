@@ -2,26 +2,38 @@
 
 Rook::Rook(int x, int y, PieceColor pieceColor) : Chesspiece(x, y, pieceColor) {}
 
-void Rook::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps) const
+void Rook::discoverSteps(std::vector<DiscoveredStep>& discoveredSteps, Chesspiece *const fields[][COL]) const
 {
     for (int i = this->positionX + 1; i < 8; i++)
     {
-        discoveredSteps.push_back(DiscoveredStep(i, this->positionY));
+        if (!this->addDiscoveredStep(discoveredSteps, i, this->positionY, fields))
+        {
+            break;
+        }
     }
 
     for (int i = this->positionX - 1; i > -1; i--)
     {
-        discoveredSteps.push_back(DiscoveredStep(i, this->positionY));
+        if (!this->addDiscoveredStep(discoveredSteps, i, this->positionY, fields))
+        {
+            break;
+        }
     }
 
     for (int i = this->positionY + 1; i < 8; i++)
     {
-        discoveredSteps.push_back(DiscoveredStep(this->positionX, i));
+        if (!this->addDiscoveredStep(discoveredSteps, this->positionX, i, fields))
+        {
+            break;
+        }
     }
 
     for (int i = this->positionY - 1; i > -1; i--)
     {
-        discoveredSteps.push_back(DiscoveredStep(this->positionX, i));
+        if (!this->addDiscoveredStep(discoveredSteps, this->positionX, i, fields))
+        {
+            break;
+        }
     }
 }
 

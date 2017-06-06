@@ -147,6 +147,16 @@ void MainWindow::fieldSelected()
                 this->clearDiscoveredSteps();
                 this->drawChesspieces();
                 this->buttonClickForPieceSelection = true;
+
+                if (this->game.isEnemyInCheck())
+                {
+                    /*if (checkmate)
+                    {
+                        QMessageBox::information(this, "Game over!", "Checkmate");
+                    }*/
+
+                    QMessageBox::information(this, "Check!", "The king is under threat of capture.");
+                }
             }
         }
     }

@@ -7,25 +7,40 @@ Chesspiece::Chesspiece(int x, int y, PieceColor pieceColor)
     this->positionX = x;
     this->positionY = y;
     this->pieceColor = pieceColor;
-    this->hasBeenHit = false;
 }
 
-Chesspiece::~Chesspiece() {}
+Chesspiece::~Chesspiece()
+{
+
+}
+
+bool Chesspiece::addDiscoveredStep(std::vector<DiscoveredStep>& discoveredSteps, int x, int y, Chesspiece *const fields[][COL]) const
+{
+    if (fields[y][x] != nullptr)
+    {
+        if (fields[y][x]->getColor() == this->pieceColor) // TODO check king here?
+        {
+            return false;
+        }
+        else
+        {
+            discoveredSteps.push_back(DiscoveredStep(x, y));
+
+            return false;
+        }
+    }
+    else
+    {
+        discoveredSteps.push_back(DiscoveredStep(x, y));
+
+        return true;
+    }
+}
 
 void Chesspiece::goTo(int x, int y)
 {
     this->positionX = x;
     this->positionY = y;
-}
-
-void Chesspiece::getHit()
-{
-    this->hasBeenHit = true;
-}
-
-bool Chesspiece::isHit()
-{
-    return this->hasBeenHit;
 }
 
 PieceColor Chesspiece::getColor()

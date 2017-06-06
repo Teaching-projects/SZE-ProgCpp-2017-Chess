@@ -6,7 +6,7 @@
 #include <string>
 #include <QMainWindow>
 #include <QPushButton>
-#include <QPalette>
+#include <QMessageBox>
 #include "Game.h"
 
 #define ROW 8

@@ -13,16 +13,25 @@
 #include "bishop.h"
 #include "knight.h"
 #include "pawn.h"
-
-//class Player;
 #include "player.h"
+
+//#define DEBUG_STEPS
+
+#ifndef ROW
+#define ROW 8
+#endif
+
+#ifndef COL
+#define COL 8
+#endif
 
 class Chessboard
 {
     friend class Player;
 
 private:
-    Chesspiece *pieceFields[8][8];
+    Chesspiece *pieceFields[ROW][COL];
+    Chesspiece *tmpPieceFields[ROW][COL];
     Chesspiece *selectedPiece;
     std::vector<DiscoveredStep> discoveredSteps;
 
@@ -31,6 +40,7 @@ private:
 
     void clearChessboard();
     void emptyDiscoveredSteps();
+    void copyPieceFields();
 
 public:
     Chessboard();
@@ -38,11 +48,13 @@ public:
 
     void replacePieces();
     void addPiecesToPlayers(Player& whitePlayer, Player& blackPlayer);
-    bool selectPiece(int x, int y, Player& activePlayer);
+    bool selectPiece(int x, int y, Player& activePlayer, Player& enemyPlayer);
     bool changeSelection(int x, int y);
-    bool movePieceTo(int x, int y);
+    bool movePieceTo(int x, int y, Player& enemyPlayer);
     void getPieceNames(std::vector<std::string>& pieceNames);
-    void ruleDiscoveredSteps();
+    void ruleDiscoveredSteps(Player& enemyPlayer);
+    bool isEnemyInCheck(Player& player);
+    bool isEnemyInCheck(Player& player, std::vector<DiscoveredStep>& discoveredSteps, Chesspiece *const pieceFields[][COL]);
     std::vector<DiscoveredStep> getDiscoveredSteps();
 };
 

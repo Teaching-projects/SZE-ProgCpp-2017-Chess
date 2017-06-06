@@ -22,6 +22,7 @@ public:
     bool selectPieceForStep(int x, int y);
     bool changeSelection(int x, int y);
     bool movePieceTo(int x, int y);
+    bool isEnemyInCheck();
     void getChessPieces(std::vector<std::string>& pieceNames);
     std::vector<DiscoveredStep> getDiscoveredSteps();
 };
